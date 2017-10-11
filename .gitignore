@@ -1,0 +1,9 @@
+/dist/*
+/rev/*
+/node_modules/*
+/.idea/*
+*-compiled.js
+*-compiled.map
+*-compiled.js.map
+yarn.lock
+*/.DS_Store

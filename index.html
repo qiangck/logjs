@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="./jquery-2.0.2.js"></script>
+	<script src="http://192.168.50.142/logjs/error.js"></script>
+	<script type="text/javascript">
+		errorLog({
+			url: 'http://192.168.50.142:3000/save',
+			data: {},
+			successCallBack: function (result) {
+				console.info('错误日志提交成功');
+			},
+			failCallBack: function (error) {
+				console.warn('错误日志提交失败');
+			}
+		});
+	</script>
+	<style type="text/css">
+		.main {
+			width: 1000px;
+			margin: 50px auto;
+		}
+		.main #button {
+			float: right;
+		}
+	</style>
+</head>
+<body>
+<div class="main">
+	<table class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>#</th>
+			<th>系统</th>
+			<th>浏览器</th>
+			<th>语言</th>
+			<th>错误消息</th>
+			<th>错误定位</th>
+			<th>错误文件</th>
+			<th>时间</th>
+		</tr>
+		</thead>
+		<tbody id="table"></tbody>
+	</table>
+	<button type="button" class="btn btn-default" id="button">查询</button>
+</div>
+<script type="text/javascript">
+	$(function() {
+		$('#button').on('click', function () {
+			$.ajax({
+				url: 'http://192.168.50.142:3000/search',
+				dataType: 'json',
+				type: 'GET',
+				success: function (data) {
+					var str = '';
+					$('#table').empty();
+					for(var i = 0;i < data.length;i++) {
+						str += '<tr><th scope="row">'+ i +'</th>\
+						<td>'+data[i].system+'</td>\
+						<td>'+data[i].browser+'</td>\
+						<td>'+data[i].language+'</td>\
+						<td>'+data[i].message+'</td>\
+						<td>'+data[i].line+'行/'+data[i].col+'列</td>\
+						<td>'+data[i].url+'</td>\
+						<td>'+data[i].time+'</td></tr>';
+					}
+					$('#table').append(str);
+				},
+				error: function (err) {}
+			});
+		});
+	});
+</script>
+</body>
+</html>
